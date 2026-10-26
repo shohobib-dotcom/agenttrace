@@ -17,14 +17,19 @@ st.sidebar.warning("Do not upload logs that contain real secrets, account IDs or
                    "Use samples or sanitized logs. Uploaded files are processed in memory only.")
 choice = st.sidebar.radio("Log", ["Upload", "Sample: suspicious", "Sample: benign"])
 text, name = None, ""
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
 if choice == "Upload":
     up = st.sidebar.file_uploader("JSONL log", type=["jsonl", "txt", "json"])
     if up:
         text, name = up.getvalue().decode("utf-8", errors="replace"), up.name
 elif choice == "Sample: suspicious":
-    text, name = open("samples/suspicious.jsonl", encoding="utf-8").read(), "suspicious.jsonl"
+    # Используем os.path.join для правильного пути
+    file_path = os.path.join(base_dir, "samples", "suspicious.jsonl")
+    text, name = open(file_path, encoding="utf-8").read(), "suspicious.jsonl"
 else:
-    text, name = open("samples/benign.jsonl", encoding="utf-8").read(), "benign.jsonl"
+    file_path = os.path.join(base_dir, "samples", "benign.jsonl")
+    text, name = open(file_path, encoding="utf-8").read(), "benign.jsonl"
 
 if not text:
     st.info("Upload a log or choose a sample in the sidebar.")
