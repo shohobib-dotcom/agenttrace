@@ -1,0 +1,8 @@
+time,tester,stage,log,found,seconds,opened_raw,clarity,would_use,comment
+2026-10-22T10:15:00,ALPHA1,alpha,suspicious.jsonl,yes,40,yes,4,4,Team member tested pipeline
+2026-10-22T14:23:11,B1,beta,suspicious.jsonl,yes,45,yes,4,4,Found R09 fast but label unclear
+2026-10-23T10:41:30,B2,beta,suspicious.jsonl,yes,30,yes,5,5,Timeline view clear hash helps
+2026-10-23T13:02:15,B3,beta,suspicious.jsonl,yes,60,yes,4,3,Took time to find event 8
+2026-10-23T15:30:00,B4,beta,suspicious.jsonl,partly,180,no,3,3,Saw flags did not open raw
+2026-10-24T11:00:00,B5,beta,suspicious.jsonl,yes,25,yes,5,4,Wanted Splunk export
+2026-10-24T14:20:00,B6,beta,suspicious.jsonl,yes,90,no,4,4,Would use but needs retention info
