@@ -20,6 +20,31 @@ st.markdown("""
     [data-testid="stMetric"] {background: rgba(128,128,128,.08); padding: 14px 16px; border-radius: 12px;}
     .hero {padding: 1.1rem 1.3rem; border: 1px solid rgba(128,128,128,.25); border-radius: 16px; margin-bottom: 1rem;}
     .muted {opacity: .72; font-size: .9rem;}
+
+    .risk-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 5px;
+    }
+    .risk-low {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+    .risk-medium {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    .risk-high {
+        background-color: #ffedd5;
+        color: #c2410c;
+    }
+    .risk-critical {
+        background-color: #7f1d1d;
+        color: #ffffff;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -81,10 +106,16 @@ def redact(value):
     return value
 
 severity_counts = {s: sum(1 for _, f in findings if f["severity"] == s) for s in ("critical", "high", "medium", "low")}
+risk_class = re.sub(r"[^a-z]", "", str(risk_level).lower())
+
 m1, m2, m3, m4 = st.columns(4)
 m1.metric("Events", len(events))
 m2.metric("Findings", len(findings))
-m3.metric("Risk score", f"{risk_score}/100", risk_level)
+m3.metric("Risk score", f"{risk_score}/100")
+m3.markdown(
+    f'<span class="risk-badge risk-{risk_class}">{str(risk_level).upper()}</span>',
+    unsafe_allow_html=True
+)
 m4.metric("Invalid lines", len(errors))
 
 left, right = st.columns([3, 2])
