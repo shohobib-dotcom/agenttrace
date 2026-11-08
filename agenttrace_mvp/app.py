@@ -11,7 +11,7 @@ import streamlit as st
 from trace_parser import parse_text, sha, verify_chain
 from rules import analyze, risk_summary
 
-st.set_page_config(page_title="AgentTrace | AI Agent Forensics", page_icon="🛡️",
+st.set_page_config(page_title="AgentTrace | AI Agent Forensics", page_icon=None,
                    layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
@@ -23,7 +23,16 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="hero"><h1>🛡️ AgentTrace</h1><div class="muted">AI Agent Forensics & Audit Platform · Inspect prompts, tool calls and outputs</div></div>', unsafe_allow_html=True)
+st.markdown(
+    """
+    <div class="hero">
+        <h1>AgentTrace</h1>
+        <div class="muted">AI Agent Forensics and Audit Platform</div>
+        <div class="muted">Inspect prompts, tool calls, outputs, and suspicious activity.</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 st.caption("Rule-based prototype. Findings are investigation leads, not proof of malicious activity.")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -96,17 +105,17 @@ with left:
         st.info("A new hash was calculated. To verify later integrity, save it separately and paste it here during a future analysis.")
 with right:
     st.markdown("#### Severity overview")
-    st.write(f"🔴 Critical: **{severity_counts['critical']}**")
-    st.write(f"🟠 High: **{severity_counts['high']}**")
-    st.write(f"🟡 Medium: **{severity_counts['medium']}**")
-    st.write(f"⚪ Low: **{severity_counts['low']}**")
+    st.write(f" Critical: **{severity_counts['critical']}**")
+    st.write(f" High: **{severity_counts['high']}**")
+    st.write(f" Medium: **{severity_counts['medium']}**")
+    st.write(f" Low: **{severity_counts['low']}**")
 
 if errors:
     with st.expander(f"Parsing warnings ({len(errors)})"):
         st.dataframe(pd.DataFrame(errors), hide_index=True, use_container_width=True)
 
 tab_timeline, tab_findings, tab_correlations, tab_export = st.tabs(
-    ["🕒 Timeline", "🚨 Findings", "🔗 Tool correlations", "📦 Export"])
+    ["Timeline", "Findings", "Tool Correlations", "Export"])
 
 with tab_timeline:
     st.subheader("Event timeline")
@@ -201,7 +210,7 @@ with tab_export:
     md_lines += ["", "## Timeline"]
     for e in events:
         md_lines.append(f"{e['idx']}. [{e['kind']}] {redact(e['summary'])} · SHA-256 `{e['raw_sha256'][:16]}`")
-    st.download_button("⬇️ Download Markdown report", "\n".join(md_lines),
+    st.download_button("Download Markdown Report", "\n".join(md_lines),
                        file_name="agenttrace_report.md", mime="text/markdown")
 
     include_raw = st.checkbox("Include raw events in JSON evidence (secrets are masked)", value=False)
@@ -225,7 +234,7 @@ with tab_export:
         "findings": [{"event": e["idx"], **f} for e, f in findings],
         "events": export_events
     }
-    st.download_button("⬇️ Download JSON evidence package", json.dumps(package, ensure_ascii=False, indent=2),
+    st.download_button("Download JSON Evidence Package", json.dumps(package, ensure_ascii=False, indent=2),
                        file_name="agenttrace_evidence.json", mime="application/json")
 
     st.divider()
